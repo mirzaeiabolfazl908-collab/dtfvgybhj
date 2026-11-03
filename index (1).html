@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>فردا بیام دنبالت؟</title>
+<style>
+:root{
+  --bg1:#fff;--bg2:#ffe3ee;--card:rgba(255,255,255,.88);--text:#7a1f45;--pink:#ff4d8d;--pink2:#ff85b3;--soft:#ffd1e3;--shadow:rgba(255,77,141,.28);
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){--bg1:#2a1220;--bg2:#4a1d36;--card:rgba(60,25,45,.88);--text:#ffd9e8;--soft:#6b2a4c;--shadow:rgba(255,77,141,.3)}
+}
+:root[data-theme="dark"]{--bg1:#2a1220;--bg2:#4a1d36;--card:rgba(60,25,45,.88);--text:#ffd9e8;--soft:#6b2a4c;--shadow:rgba(255,77,141,.3)}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+*{box-sizing:border-box}
+body{margin:0;height:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;
+  font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;color:var(--text);
+  background:linear-gradient(160deg,var(--bg1),var(--bg2))}
+.heart{position:fixed;bottom:-40px;pointer-events:none;animation:rise linear forwards;opacity:.8;user-select:none}
+@keyframes rise{
+  0%{transform:translateY(0) translateX(0) scale(.8);opacity:0}
+  10%{opacity:.85}
+  50%{transform:translateY(-55vh) translateX(18px) scale(1)}
+  100%{transform:translateY(-115vh) translateX(-18px) scale(1.1);opacity:0}
+}
+.card{position:relative;z-index:2;width:min(90vw,380px);padding:34px 24px 30px;text-align:center;
+  background:var(--card);border:2px solid var(--soft);border-radius:28px;
+  box-shadow:0 18px 50px var(--shadow);backdrop-filter:blur(6px);
+  animation:pop .7s cubic-bezier(.2,1.4,.4,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}to{transform:scale(1);opacity:1}}
+.big{font-size:56px;animation:beat 1.3s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+h1{font-size:24px;line-height:1.7;margin:10px 0 24px}
+.btns{display:flex;gap:14px;justify-content:center;align-items:center;min-height:56px;position:relative}
+button{font:inherit;font-size:17px;border:0;border-radius:999px;padding:13px 26px;cursor:pointer;transition:transform .15s}
+#yes{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 8px 20px var(--shadow)}
+#yes:active{transform:scale(.94)}
+#no{background:var(--soft);color:var(--text)}
+#msg{display:none}
+.opt{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#fff;box-shadow:0 8px 20px var(--shadow);min-width:96px}
+.opt:active{transform:scale(.94)}
+#msg h1{margin-bottom:8px}
+#msg p{margin:0;font-size:17px;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="card">
+  <div id="q1">
+    <div class="big">🎁</div>
+    <h1>از هدیه‌ت راضی بودی؟</h1>
+    <div class="btns">
+      <button class="opt" id="g1">آره 💖</button>
+      <button class="opt" id="g2">نه 💖</button>
+    </div>
+  </div>
+  <div id="ask" style="display:none">
+    <div class="big">💗</div>
+    <h1>فردا بیام دنبالت؟</h1>
+    <div class="btns">
+      <button id="yes">بیا 💕</button>
+      <button id="no">نیا</button>
+    </div>
+  </div>
+  <div id="msg">
+    <div class="big" id="mEmoji">🥰</div>
+    <h1 id="mTitle">یوهووو!</h1>
+    <p id="mText">پس منتظرم باش، میام دنبالت 💖</p>
+  </div>
+</div>
+<script>
+(function(){
+  var icons=["💗","💖","💕","💓","🩷","♡"];
+  function spawn(){
+    var h=document.createElement("span");
+    h.className="heart";
+    h.textContent=icons[Math.floor(Math.random()*icons.length)];
+    h.style.left=Math.random()*100+"vw";
+    h.style.fontSize=(12+Math.random()*20)+"px";
+    var d=6+Math.random()*6;
+    h.style.animationDuration=d+"s";
+    document.body.appendChild(h);
+    setTimeout(function(){h.remove()},d*1000);
+  }
+  setInterval(spawn,350);
+  for(var i=0;i<12;i++)setTimeout(spawn,i*120);
+
+  var no=document.getElementById("no"),yes=document.getElementById("yes");
+  function next(){
+    document.getElementById("q1").style.display="none";
+    document.getElementById("ask").style.display="block";
+    for(var i=0;i<10;i++)setTimeout(spawn,i*40);
+  }
+  document.getElementById("g1").addEventListener("click",next);
+  document.getElementById("g2").addEventListener("click",next);
+  function show(emoji,title,text,burst){
+    document.getElementById("mEmoji").textContent=emoji;
+    document.getElementById("mTitle").textContent=title;
+    document.getElementById("mText").textContent=text;
+    document.getElementById("ask").style.display="none";
+    no.style.display="none";
+    no.style.display="none";
+    document.getElementById("msg").style.display="block";
+    for(var i=0;i<burst;i++)setTimeout(spawn,i*40);
+  }
+  yes.addEventListener("click",function(){
+    show("🥰","یوهووو!","پس منتظرم باش، میام دنبالت 💖",40);
+  });
+  function dodge(e){
+    if(e)e.preventDefault();
+    if(no.parentNode!==document.body)document.body.appendChild(no);
+    no.style.position="fixed";
+    no.style.zIndex=5;
+    var w=no.offsetWidth,h=no.offsetHeight;
+    no.style.left=Math.max(10,Math.random()*(window.innerWidth-w-20))+"px";
+    no.style.top=Math.max(10,Math.random()*(window.innerHeight-h-20))+"px";
+  }
+  no.addEventListener("touchstart",dodge,{passive:false});
+  no.addEventListener("pointerdown",dodge);
+  no.addEventListener("click",dodge);
+})();
+</script>
+</body>
+</html>
